@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🔐 Next.js + Better Auth + Prisma
 
-## Getting Started
+**A modern, type-safe full-stack authentication starter powered by Next.js App Router, Better Auth, Prisma ORM, PostgreSQL, and Bun.**
 
-First, run the development server:
+[![Next.js](https://img.shields.io/badge/Next.js-App_Router-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![Better Auth](https://img.shields.io/badge/Better_Auth-1.x-10B981?style=for-the-badge)](https://www.better-auth.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-6_Stable-2D3748?style=for-the-badge&logo=prisma)](https://www.prisma.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Bun](https://img.shields.io/badge/Bun-Runtime-FBF0DF?style=for-the-badge&logo=bun&logoColor=black)](https://bun.sh/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## ✨ Features
+
+- **Full-Stack Authentication:** Email & password sign-up, sign-in, session management, and sign-out out of the box.
+- **Database-Backed Sessions:** Persistent `user`, `session`, `account`, and `verification` tables managed in PostgreSQL via Prisma ORM.
+- **End-to-End Type Safety:** Typed database queries with Prisma Client and typed React session hooks (`useSession`) via `better-auth/react`.
+- **Modern SaaS UI:** Split-screen dark-mode authentication interface built with Tailwind CSS v4.
+- **Bun Optimized:** Fast package management, script execution, and dev server startup.
+
+---
+
+## 🗂️ Project Structure
+
+```text
+├── app/
+│   ├── api/
+│   │   └── auth/
+│   │       └── [...all]/
+│   │           └── route.ts      # Better Auth catch-all API handler
+│   ├── globals.css               # Tailwind CSS v4 base styles
+│   ├── layout.tsx                # Root Next.js layout
+│   └── page.tsx                  # Split-screen SaaS Sign-In / Sign-Up & Dashboard
+├── lib/
+│   ├── auth.ts                   # Server-side Better Auth instance & Prisma adapter
+│   ├── auth-client.ts            # Client-side auth hooks (signIn, signUp, useSession)
+│   └── prisma.ts                 # Global Prisma Client singleton
+├── prisma/
+│   └── schema.prisma             # PostgreSQL schema & Better Auth models
+├── next.config.ts                # Configured with serverExternalPackages for Prisma
+└── .env                          # Environment variables (not committed)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# 🚀 Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 1. Prerequisites
+Make sure you have the following installed locally:
+- Bun (v1.1+)
+- PostgreSQL running locally or via a cloud provider (e.g., Neon, Supabase, Railway)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 2. Clone & Install Dependencies
+Bash
+- git clone 
+- cd betterauth-prisma-nextjs-postgre
+- bun install
 
-## Learn More
+## 3. Configure Environment Variables
+Create a .env file in the root directory and add your PostgreSQL connection string and Better Auth secrets:
 
-To learn more about Next.js, take a look at the following resources:
+```
+DATABASE_URL="postgresql://username:password@localhost:1234/betterauth?schema=public"
+BETTER_AUTH_SECRET="openssl_rand_base64_32"
+BETTER_AUTH_URL="http://localhost:3000"
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+💡 Tip: Generate a secure BETTER_AUTH_SECRET via terminal:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Bash 
+```
+openssl rand -base64 32
+```
 
-## Deploy on Vercel
+## 4. Run Database Migrations & Generate Client
+Push the Better Auth schema to PostgreSQL and generate the Prisma Client:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Bash
+```
+bunx prisma migrate dev --name init-auth
+bunx prisma generate
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 5. Start the Development Server
+Bash
+```
+bun dev
+```
